@@ -1,0 +1,49 @@
+$animation-duration: 1.8s
+.loader-container
+    height: 100%
+    width: 100%
+    background: rgb(255 255 255 / 70%)
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 1
+.loader
+    position: absolute
+    top: 50%
+    left: calc(50% - 25px)
+    transform: translate(-50%, -50%)
+    width: 50px
+    height: 10px
+    background: rgb(117, 17, 244)
+    border-radius: 5px
+    animation: load $animation-duration ease-in-out infinite
+    z-index: 1
+    &:before,
+    &:after
+        position: absolute
+        display: block
+        content: ""
+        animation: load $animation-duration ease-in-out infinite
+        height: 10px
+        border-radius: 5px
+
+    &:before
+        top: -20px
+        left: 10px
+        width: 40px
+        background: $secondary
+
+    &:after
+        bottom: -20px
+        width: 35px
+        background: rgb(249, 192, 1)
+
+@keyframes load
+    0%
+        transform: translateX(40px)
+
+    50%
+        transform: translateX(-30px)
+
+    100%
+        transform: translateX(40px)

@@ -1,0 +1,54 @@
+.inputs
+    position: relative
+    margin-bottom: 35px
+.input,
+.inputs .vs__dropdown-toggle
+    border: none
+    background: #fff
+    width: 100%
+    padding: 8px 16px
+    line-height: 1.1
+    font-size: 20px
+    border-radius: 10px
+    font-weight: 300
+    min-height: 45px
+    transition: box-shadow 0.3s
+    &:focus
+        outline: none
+        box-shadow: 0.2rem 0.8rem 1.6rem rgba(115, 115, 115, 0.15)
+    &:focus ~ .label,
+    &:active ~ .label
+        font-size: 14px
+        transform: translateY(-35px)
+        transition: 0.3s ease-in-out
+    &_error ~ .label
+        color: #f44336
+        font-size: 14px
+        transform: translateY(-35px)
+    &_correct ~ .label
+        color: #009688
+.vs--open .vs__dropdown-toggle
+    border-radius: 10px 10px 0 0
+.vs__dropdown-menu
+    border-radius: 0 0 10px 10px
+    border: none
+.vs__open-indicator,
+.vs__clear
+    fill: #000
+.vs__search
+    display: none
+.vs__selected-options
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+.label
+    position: absolute
+    top: 11px
+    left: 16px
+    font-weight: 300
+    font-size: 18px
+    transition: 0.3s ease-in-out
+    &_active
+        font-size: 14px
+        transform: translateY(-35px)
+        transition: 0.3s ease-in-out

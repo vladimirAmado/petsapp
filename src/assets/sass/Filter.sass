@@ -1,0 +1,41 @@
+.navbar-filter
+    width: 100%
+    &__list
+        display: flex
+        flex-direction: row
+        align-items: center
+        overflow: hidden
+        overflow-x: auto
+        -ms-overflow-style: none
+        overflow: -moz-scrollbars-none
+        &::-webkit-scrollbar
+            width: 0
+    &__item
+        margin-right: 15px
+        transition: 0.35s ease
+        &_active .navbar-filter__item-img
+            background: #ffd3d0
+            border: none
+            & svg path
+                stroke: #f44336
+        &-img
+            width: 65px
+            height: 65px
+            border: 1px solid #EFEFF0
+            box-sizing: border-box
+            border-radius: 15px
+            display: flex
+            align-items: center
+            justify-content: center
+            transition: 0.35s ease
+            cursor: pointer
+        &-text
+            font-style: normal
+            font-weight: normal
+            font-size: 16px
+            line-height: 22px
+            color: #3C3C43
+            text-align: center
+            transition: 0.35s ease
+        &:last-child
+            margin-right: 0
