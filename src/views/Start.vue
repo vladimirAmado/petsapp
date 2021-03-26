@@ -277,6 +277,8 @@
 </template>
 
 <script>
+import messages from '@/plugins/messages'
+
 export default {
   name: 'Start',
   data: () => ({
@@ -286,6 +288,9 @@ export default {
     lines: {}
   }),
   mounted () {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message] || 'Непредсказуемый какой чорт!')
+    }
     this.svg.path = {
       lineTop: this.$refs.lineTop,
       lineMiddle: this.$refs.lineMiddle,

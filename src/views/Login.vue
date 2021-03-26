@@ -11,46 +11,57 @@
       v-on:submit.prevent="onSubmit()"
     >
       <div class="login-form__container">
-        <div class="login-form__inputs inputs">
-          <input
-            id="email"
-            v-model.trim="email"
-            class="login-form__input input"
-            type="text"
-            name="email"
-            v-on:input="$v.email.$touch()"
-            v-on:blur="$v.email.$touch()"
-            :class="{'input_error': ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email ), 'input_correct': !$v.email.$invalid }"
-          >
-          <label
-            :class="{'label_active': $v.email.$model}"
-            class="login-form__label label"
-            for="email"
-          >E-mail</label>
+        <div class="inputs">
+           <vs-input
+              type="email"
+              shadow
+              label-placeholder="E-mail"
+              v-model="email"
+              dark
+              :state="successEmail"
+              v-on:input="$v.email.$touch()"
+              v-on:blur="$v.email.$touch()"
+            >
+              <template
+                v-if="($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email )"
+                #message-danger
+              >
+                E-mail invalid
+              </template>
+            </vs-input>
         </div>
-        <div class="login-form__inputs inputs">
-          <input
-            id="password"
-            v-model.trim="password"
-            class="login-form__input input"
+        <div class="inputs">
+          <vs-input
+            shadow
             type="password"
-            name="password"
+            label-placeholder="Password"
+            v-model="password"
+            dark
+            :state="successPass"
             v-on:input="$v.password.$touch()"
             v-on:blur="$v.password.$touch()"
-            :class="{'input_error': ($v.password.$dirty && !$v.password.required), 'input_correct': !$v.password.$invalid}"
-          >
-          <label
-            :class="{'label_active': $v.password.$model}"
-            class="login-form__label label"
-            for="password"
-          >Password</label>
+            :visiblePassword="hasVisiblePassword"
+            icon-after
+            v-on:click-icon="hasVisiblePassword = !hasVisiblePassword"
+            >
+            <template #icon>
+              <i v-if="!hasVisiblePassword" class='bx bx-show-alt bx-xs'></i>
+              <i v-else class='bx bx-hide bx-xs'></i>
+            </template>
+            <template
+              v-if="($v.password.$dirty && !$v.password.required)"
+              #message-danger
+            >
+              Required
+            </template>
+          </vs-input>
         </div>
-        <button
-          type="submit"
-          class="btn btn_rounded"
+        <vs-button
+          color="#ff5f54"
+          class="btn"
         >
           Sign in
-        </button>
+        </vs-button>
         <router-link
           to="/register"
           class="form__bottom-link"
@@ -64,16 +75,52 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators'
+import messages from '@/plugins/messages'
+
 export default {
   name: 'Login',
   data: () => ({
     email: '',
     password: '',
-    loading: false
+    loading: false,
+    hasVisiblePassword: false
   }),
+  watch: {
+    error (e) {
+      this.$error(messages[e.code])
+    }
+  },
+  computed: {
+    error () {
+      return this.$store.getters.error
+    },
+    successEmail: function () {
+      if (!this.$v.email.$invalid) {
+        return 'success'
+      } else if ((this.$v.email.$dirty && !this.$v.email.required) || (this.$v.email.$dirty && !this.$v.email.email)) {
+        return 'danger'
+      } else {
+        return ''
+      }
+    },
+    successPass: function () {
+      if (!this.$v.password.$invalid) {
+        return 'success'
+      } else if ((this.$v.password.$dirty && !this.$v.password.required)) {
+        return 'danger'
+      } else {
+        return ''
+      }
+    }
+  },
   validations: {
     email: { required, email },
     password: { required }
+  },
+  mounted () {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message] || 'Непредсказуемый какой чорт!')
+    }
   },
   methods: {
     async onSubmit () {
@@ -87,7 +134,7 @@ export default {
       }
       try {
         await this.$store.dispatch('login', formData)
-        this.$router.push('/Home')
+        this.$router.push('/home?message=login')
       } catch (error) {}
     }
   }

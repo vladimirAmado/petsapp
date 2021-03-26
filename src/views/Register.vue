@@ -14,76 +14,92 @@
         <transition name="slide-fade" mode="in-out">
           <div class="slide-wrapper" v-if="step === 1">
             <div class="register-form__inputs inputs">
-              <input
-                id="name"
-                v-model.trim="name"
-                class="register-form__input input"
+              <vs-input
                 type="text"
-                name="name"
+                shadow
+                label-placeholder="Name"
+                v-model.trim="name"
+                dark
+                :state="successName"
                 v-on:input="$v.name.$touch()"
                 v-on:blur="$v.name.$touch()"
-                :class="{'input_error': ($v.name.$dirty && !$v.name.required), 'input_correct': !$v.name.$invalid }"
               >
-              <label
-                :class="{'label_active': $v.name.$model}"
-                class="register-form__label label"
-                for="name"
-              >Ваше имя</label>
+                <template
+                  v-if="($v.name.$dirty && !$v.name.required)"
+                  #message-danger
+                >
+                  Required
+                </template>
+              </vs-input>
             </div>
             <div class="register-form__inputs inputs">
-              <input
-                id="email"
-                v-model.trim="email"
-                class="register-form__input input"
-                type="text"
-                name="email"
+              <vs-input
+                type="email"
+                shadow
+                label-placeholder="E-mail"
+                v-model="email"
+                dark
+                :state="successEmail"
                 v-on:input="$v.email.$touch()"
                 v-on:blur="$v.email.$touch()"
-                :class="{'input_error': ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email ), 'input_correct': !$v.email.$invalid }"
               >
-              <label
-                :class="{'label_active': $v.email.$model}"
-                class="register-form__label label"
-                for="email"
-              >E-mail</label>
+                <template
+                  v-if="($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email )"
+                  #message-danger
+                >
+                  E-mail invalid
+                </template>
+              </vs-input>
             </div>
           </div>
         </transition>
         <transition name="slide-fade" mode="in-out">
           <div class="slide-wrapper" v-if="step === 2">
             <div class="register-form__inputs inputs">
-              <input
-                id="password"
-                v-model.trim="password"
-                class="register-form__input input"
+              <vs-input
+                shadow
                 type="password"
-                name="password"
+                label-placeholder="Password"
+                v-model="password"
+                dark
+                :state="successPass"
                 v-on:input="$v.password.$touch()"
                 v-on:blur="$v.password.$touch()"
-                :class="{'input_error': ($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLenght), 'input_correct': !$v.password.$invalid}"
-              >
-              <label
-                :class="{'label_active': $v.password.$model}"
-                class="register-form__label label"
-                for="password"
-              >Пароль</label>
+                :visiblePassword="hasVisiblePassword"
+                icon-after
+                v-on:click-icon="hasVisiblePassword = !hasVisiblePassword"
+                >
+                <template #icon>
+                  <i v-if="!hasVisiblePassword" class='bx bx-show-alt bx-xs'></i>
+                  <i v-else class='bx bx-hide bx-xs'></i>
+                </template>
+                <template
+                  v-if="($v.password.$dirty && !$v.password.required) || ($v.password.$dirty && !$v.password.minLength)"
+                  #message-danger
+                >
+                  Required
+                </template>
+              </vs-input>
             </div>
             <div class="register-form__inputs inputs">
-              <input
-                id="confirmPassword"
-                v-model.trim="confirmPassword"
-                class="register-form__input input"
+              <vs-input
+                shadow
                 type="password"
-                name="confirmPassword"
+                label-placeholder="confirmPassword"
+                v-model="confirmPassword"
+                dark
+                :state="successConfirmPass"
                 v-on:input="$v.confirmPassword.$touch()"
                 v-on:blur="$v.confirmPassword.$touch()"
-                :class="{'input_error': ($v.confirmPassword.$dirty && !$v.confirmPassword.required) || ($v.confirmPassword.$dirty && !$v.confirmPassword.password), 'input_correct': !$v.confirmPassword.$invalid}"
-              >
-              <label
-                :class="{'label_active': $v.confirmPassword.$model}"
-                class="register-form__label label"
-                for="confirmPassword"
-              >Подтвердите пароль</label>
+                :visiblePassword="hasVisiblePassword"
+                >
+                <template
+                  v-if="($v.confirmPassword.$dirty && !$v.confirmPassword.required) || ($v.confirmPassword.$dirty && !$v.confirmPassword.pass)"
+                  #message-danger
+                >
+                  Required
+                </template>
+              </vs-input>
             </div>
           </div>
         </transition>
@@ -153,29 +169,63 @@
 
 <script>
 import { required, email, sameAs, minLength } from 'vuelidate/lib/validators'
-import vSelect from 'vue-select'
+import messages from '@/plugins/messages'
 export default {
   name: 'Register',
   data: () => ({
     step: 1,
+    hasVisiblePassword: false,
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
     country: '',
-    city: '',
     countries: [],
+    city: '',
     cities: []
   }),
-  components: {
-    vSelect
-  },
   computed: {
     sortedCountries () {
       return [...this.countries].sort((a, b) => a.name.localeCompare(b.name))
     },
     sortedCities () {
       return [...this.cities].sort((a, b) => a.name.localeCompare(b.name)).filter(city => city.country_code === this.country.code)
+    },
+    successEmail: function () {
+      if (!this.$v.email.$invalid) {
+        return 'success'
+      } else if ((this.$v.email.$dirty && !this.$v.email.required) || (this.$v.email.$dirty && !this.$v.email.email)) {
+        return 'danger'
+      } else {
+        return ''
+      }
+    },
+    successPass: function () {
+      if (!this.$v.password.$invalid) {
+        return 'success'
+      } else if ((this.$v.password.$dirty && !this.$v.password.required) || (this.$v.password.$dirty && !this.$v.password.minLength)) {
+        return 'danger'
+      } else {
+        return ''
+      }
+    },
+    successName: function () {
+      if (!this.$v.name.$invalid) {
+        return 'success'
+      } else if ((this.$v.name.$dirty && !this.$v.name.required)) {
+        return 'danger'
+      } else {
+        return ''
+      }
+    },
+    successConfirmPass: function () {
+      if (!this.$v.confirmPassword.$invalid) {
+        return 'success'
+      } else if ((this.$v.confirmPassword.$dirty && !this.$v.confirmPassword.required) || (this.$v.confirmPassword.$dirty && !this.$v.confirmPassword.password)) {
+        return 'danger'
+      } else {
+        return ''
+      }
     }
   },
   watch: {
@@ -187,6 +237,9 @@ export default {
     }
   },
   mounted () {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message])
+    }
     fetch('https://vladimiramado.github.io/data/cities.json')
       .then(response => response.json())
       .then(json => {
@@ -244,7 +297,7 @@ export default {
       }
       try {
         await this.$store.dispatch('register', formData)
-        this.$router.push('/Home')
+        this.$router.push('/home?message=register')
       } catch (error) {}
     }
   }

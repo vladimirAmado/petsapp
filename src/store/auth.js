@@ -6,8 +6,8 @@ export default {
       try {
         await firebase.auth().signInWithEmailAndPassword(email, password)
       } catch (e) {
-        const error = e
-        throw error
+        commit('setError', e)
+        throw e
       }
     },
     async register ({ dispatch, commit }, { email, password, name, city, country }) {
@@ -20,16 +20,17 @@ export default {
           country: country
         })
       } catch (e) {
-        const error = e
-        throw error
+        commit('setError', e)
+        throw e
       }
     },
     getUid () {
       const user = firebase.auth().currentUser
       return user ? user.uid : null
     },
-    async logout () {
+    async logout ({ commit }) {
       await firebase.auth().signOut()
+      commit('clearInfo')
     }
   }
 }

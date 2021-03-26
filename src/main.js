@@ -3,10 +3,14 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import Vuelidate from 'vuelidate'
-import './registerServiceWorker'
 import firebase from 'firebase/app'
+import Vuesax from 'vuesax'
+import messagePlugin from '@/plugins/messages.plugin'
+import 'vuesax/dist/vuesax.css'
+import './registerServiceWorker'
 import 'firebase/auth'
 import 'firebase/database'
+import vSelect from 'vue-select'
 
 const config = {
   apiKey: 'AIzaSyCTKFVPORd4_zq8m-OUUhceRfSoZNoRiIE',
@@ -20,7 +24,10 @@ const config = {
 firebase.initializeApp(config)
 
 Vue.use(Vuelidate)
+Vue.use(Vuesax)
+Vue.use(messagePlugin)
 Vue.config.productionTip = false
+Vue.component('v-select', vSelect)
 
 let app
 
