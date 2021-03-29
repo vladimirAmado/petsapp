@@ -12,19 +12,20 @@
     display: flex
     flex-direction: column
     overflow: hidden
-    height: 100%
     cursor: pointer
     &__head
-        height: 50%
+        height: 130px
         position: relative
         &-img
-            object-fit: cover
-            width: 100%
             height: 100%
-            object-position: center
+            display: flex
+            align-items: center
+            justify-content: center
             & img
                 width: 100%
                 height: 100%
+                object-fit: cover
+                flex-grow: 0
         &-btn
             position: absolute
             right: 10px
@@ -82,3 +83,134 @@
             color: #3C3C43
     &:nth-child(2n+2)
         margin-right: 0
+
+.card-detail
+    position: absolute
+    opacity: 0
+    height: 100%
+    bottom: 0
+    left: 0
+    width: 100%
+    z-index: 1
+    background: #fff
+    transform: translateX(-100%)
+    transition: 0.35s ease-in-out
+    pointer-events: none
+    &_show
+        opacity: 1
+        transition: 0.35s ease-in-out
+        transform: translateX(0)
+        pointer-events: all
+    &__controls
+        position: absolute
+        display: flex
+        flex-direction: row
+        width: 100%
+        left: 0
+        right: 0
+        top: 30px
+        padding: 0 15px
+    &__back
+        width: 30px
+        align-items: center
+        display: flex
+        justify-content: center
+        cursor: pointer
+    &__favorite
+        display: flex
+        justify-content: center
+        align-items: center
+        background: #FFFFFF
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.12)
+        width: 31px
+        height: 31px
+        border-radius: 50%
+        cursor: pointer
+        margin-left: auto
+        &_added svg path
+            fill: #ff5f54
+    &__head
+        display: flex
+        height: 355px
+        border-radius: 0px 0px 30px 30px
+        overflow: hidden
+        margin-bottom: 20px
+        & img
+            width: 100%
+            height: 100%
+            object-fit: cover
+            object-position: center
+    &__info
+        padding: 0 16px
+    &__tags
+        display: flex
+        flex-direction: row
+        margin-bottom: 20px
+        justify-content: space-between
+    &__tag
+        background: #FFFFFF
+        border: 1px solid #EFEFF0
+        border-radius: 15px
+        display: flex
+        flex-direction: column
+        align-items: center
+        width: 100px
+        min-height: 65px
+        justify-content: center
+        & span
+            font-style: normal
+            font-weight: normal
+            font-size: 14px
+            line-height: 22px
+            color: #515151
+        & p
+            font-style: normal
+            font-weight: 500
+            font-size: 16px
+            line-height: 22px
+            color: #3C3C43
+    &__desc
+        display: grid
+        grid-template-columns: 1fr 1fr
+        grid-template-rows: auto auto 1fr
+        gap: 10px 0px
+        grid-template-areas: "card-detail__name card-detail__type" "card-detail__location card-detail__location" "card-detail__about card-detail__about"
+    &__name
+        grid-area: card-detail__name
+        font-style: normal
+        font-weight: normal
+        font-size: 16px
+        line-height: 22px
+    &__type
+        grid-area: card-detail__type
+        text-align: right
+        font-style: normal
+        font-weight: normal
+        font-size: 16px
+        line-height: 22px
+    &__location
+        grid-area: card-detail__location
+        font-style: normal
+        font-weight: normal
+        font-size: 14px
+        line-height: 22px
+    &__about
+        grid-area: card-detail__about
+        font-style: normal
+        font-weight: normal
+        font-size: 16px
+        line-height: 24px
+        & h2
+            font-style: normal
+            font-weight: 500
+            font-size: 18px
+            line-height: 22px
+            margin-bottom: 10px
+    &__footer
+        display: flex
+        align-items: center
+        min-height: 110px
+        & .btn_rounded:first-child
+            border-radius: 15px
+            flex: 1 1 auto
+            width: 100%

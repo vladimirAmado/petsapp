@@ -226,6 +226,9 @@ export default {
       } else {
         return ''
       }
+    },
+    error () {
+      return this.$store.getters.error
     }
   },
   watch: {
@@ -234,6 +237,9 @@ export default {
         this.country = ''
         this.city = ''
       }
+    },
+    error (e) {
+      this.$error(messages[e.code])
     }
   },
   mounted () {

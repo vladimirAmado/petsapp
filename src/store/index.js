@@ -7,9 +7,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    error: null
+    error: null,
+    filter: []
   },
   mutations: {
+    setFilter (state, filter) {
+      state.filter = filter
+    },
     setError (state, error) {
       state.error = error
     },
@@ -18,7 +22,8 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    error: s => s.error
+    error: s => s.error,
+    filter: s => s.filter
   },
   actions: {
   },
