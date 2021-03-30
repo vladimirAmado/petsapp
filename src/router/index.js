@@ -8,23 +8,44 @@ const routes = [
   {
     path: '/',
     name: 'Start',
+    meta: { layout: 'NoLayout' },
     component: () => import('../views/Start.vue')
   },
   {
     path: '/login',
     name: 'Login',
+    meta: { layout: 'NoLayout' },
     component: () => import('../views/Login.vue')
   },
   {
     path: '/register',
     name: 'Register',
+    meta: { layout: 'NoLayout' },
     component: () => import('../views/Register.vue')
   },
   {
     path: '/home',
     name: 'Home',
-    meta: { auth: true },
+    meta: { auth: true, layout: 'MainLayout' },
     component: () => import('../views/Home.vue')
+  },
+  {
+    path: '/messages',
+    name: 'messages',
+    meta: { auth: true, layout: 'MainLayout' },
+    component: () => import('../views/Messages.vue')
+  },
+  {
+    path: '/favorite',
+    name: 'Favorite',
+    meta: { auth: true, layout: 'MainLayout' },
+    component: () => import('../views/Favorite.vue')
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    meta: { auth: true, layout: 'MainLayout' },
+    component: () => import('../views/Profile.vue')
   }
 ]
 

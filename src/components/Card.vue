@@ -1,6 +1,11 @@
 <template>
-  <main class="main">
-    <div class="card-list" v-if="Object.keys(filtredAnimals).length">
+  <div class="container">
+    <div v-if="loading">
+      <div class="card-list">
+        <div class="card card_loading" v-for="n in 10" :key="n"></div>
+      </div>
+    </div>
+    <div class="card-list" v-else-if="Object.keys(filtredAnimals).length">
       <div
         class="card"
         v-for="(animal, index) in filtredAnimals"
@@ -92,7 +97,7 @@
     </h3>
     <div class="card-detail" :class="{'card-detail_show' : active}">
       <div class="card-detail__controls">
-        <div class="card-detail__back" v-on:click="active = !active">
+        <div class="card-detail__back" v-on:click="detailClose()">
           <svg width="13" height="21" viewBox="0 0 13 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M10.0371 20.5827L0.792152 11.4458C0.402616 11.0612 0.402616 10.4398 0.792152 10.0542L10.0371 0.917333C10.5995 0.360889 11.5144 0.360889 12.0777 0.917333C12.64 1.47378 12.64 2.37687 12.0777 2.93332L4.16913 10.7505L12.0777 18.5657C12.64 19.1231 12.64 20.0262 12.0777 20.5827C11.5144 21.1391 10.5995 21.1391 10.0371 20.5827Z" fill="white"/>
           </svg>
@@ -142,90 +147,36 @@
         </div>
         <div class="card-detail__footer">
           <a href="#" class="btn btn_rounded ">Adopt</a>
-          <a href="#" class="btn btn_rounded btn_icon">
+          <a href="tel:" class="btn btn_rounded btn_icon">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5.66304 0.599976H2.99998C1.67449 0.599976 0.599976 1.67449 0.599976 2.99998V5.39997C0.599976 12.0274 5.97256 17.4 12.6 17.4H15C16.3255 17.4 17.4 16.3255 17.4 15V13.3416C17.4 12.8871 17.1432 12.4716 16.7366 12.2683L13.8375 10.8187C13.1844 10.4922 12.3934 10.8198 12.1624 11.5126L11.8051 12.5845C11.5737 13.2789 10.8614 13.6923 10.1437 13.5487C7.27112 12.9742 5.02575 10.7288 4.45123 7.85627C4.30769 7.13856 4.72104 6.42629 5.41541 6.19483L6.74576 5.75138C7.34063 5.55309 7.68254 4.93024 7.53046 4.32192L6.82721 1.50893C6.69366 0.974732 6.21368 0.599976 5.66304 0.599976Z" fill="#9B8ACA" stroke="#9B8ACA" stroke-width="0.79"/>
+              <path d="M5.66304 0.599976H2.99998C1.67449 0.599976 0.599976 1.67449 0.599976 2.99998V5.39997C0.599976 12.0274 5.97256 17.4 12.6 17.4H15C16.3255 17.4 17.4 16.3255 17.4 15V13.3416C17.4 12.8871 17.1432 12.4716 16.7366 12.2683L13.8375 10.8187C13.1844 10.4922 12.3934 10.8198 12.1624 11.5126L11.8051 12.5845C11.5737 13.2789 10.8614 13.6923 10.1437 13.5487C7.27112 12.9742 5.02575 10.7288 4.45123 7.85627C4.30769 7.13856 4.72104 6.42629 5.41541 6.19483L6.74576 5.75138C7.34063 5.55309 7.68254 4.93024 7.53046 4.32192L6.82721 1.50893C6.69366 0.974732 6.21368 0.599976 5.66304 0.599976Z" fill="#fff" stroke="#fff" stroke-width="0.79"/>
             </svg>
           </a>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
+  name: 'Card',
   data: () => ({
-    animals: [
-      {
-        name: 'Nora',
-        groupID: 1,
-        age: '3',
-        weight: '2',
-        img: 'https://avochka.ru/img/kartinka/1/velsh_korgy.jpg',
-        sex: 'Female',
-        location: '110 N 3th St, Brooklyn, NY, USA',
-        about: `The Nora is a bright, sensitive dog who enjoys play with his human family
-        and responds well to training. As herders bred to move cattle, they are fearless
-        and independent. They are vigilant watchdogs, with acute senses and a “big dog” bark.
-        Families who can meet their bold but kindly Pembroke’s need for activity and togetherness
-        will never have a more loyal, loving pet.`,
-        type: 'Corgi'
-      },
-      {
-        name: 'Lucifer',
-        age: '7',
-        groupID: 1,
-        weight: '2',
-        img: 'https://a.radikal.ru/a29/1808/ba/05e0baeeb709.jpg',
-        sex: 'Male',
-        location: '110 N 3th St, Brooklyn, NY, USA',
-        about: `The Nora is a bright, sensitive dog who enjoys play with his human family
-        and responds well to training. As herders bred to move cattle, they are fearless
-        and independent. They are vigilant watchdogs, with acute senses and a “big dog” bark.
-        Families who can meet their bold but kindly Pembroke’s need for activity and togetherness
-        will never have a more loyal, loving pet.`,
-        type: 'Swissy'
-      },
-      {
-        name: 'George',
-        age: '13',
-        weight: '2',
-        groupID: 1,
-        location: '110 N 3th St, Brooklyn, NY, USA',
-        img: 'https://pbs.twimg.com/media/Eb3TLnjXsAElaxJ.jpg',
-        sex: 'Male',
-        about: `The Nora is a bright, sensitive dog who enjoys play with his human family
-        and responds well to training. As herders bred to move cattle, they are fearless
-        and independent. They are vigilant watchdogs, with acute senses and a “big dog” bark.
-        Families who can meet their bold but kindly Pembroke’s need for activity and togetherness
-        will never have a more loyal, loving pet.`,
-        type: 'Samoyed'
-      },
-      {
-        name: 'tipa kot',
-        age: '12',
-        weight: '2',
-        groupID: 2,
-        location: '110 N 3th St, Brooklyn, NY, USA',
-        img: 'https://avochka.ru/img/kartinka/1/velsh_korgy.jpg',
-        sex: 'Female',
-        about: `The Nora is a bright, sensitive dog who enjoys play with his human family
-        and responds well to training. As herders bred to move cattle, they are fearless
-        and independent. They are vigilant watchdogs, with acute senses and a “big dog” bark.
-        Families who can meet their bold but kindly Pembroke’s need for activity and togetherness
-        will never have a more loyal, loving pet.`,
-        type: 'Corgi',
-        users: [
-          { uid: 'GCxHURFpx0dOQQ3tb2Yrpc1dt6o1' },
-          { uid: 'GMLajBFXvMcdZwzFXrBJREdmu2R2' }
-        ]
-      }
-    ],
-    animal: [],
     active: false,
-    filter: []
+    filter: [],
+    animal: [],
+    loading: true
   }),
+  async mounted () {
+    if (!Object.keys(this.animals).length) {
+      try {
+        await this.fetchAnimals()
+        this.loading = false
+      } catch (error) {}
+    }
+  },
   watch: {
     arrfilter () {
       this.filter = this.$store.getters.filter
@@ -233,7 +184,7 @@ export default {
   },
   computed: {
     filtredAnimals () {
-      if (this.filter.length !== 0) {
+      if (this.filter.length !== 0 && Object.keys(this.animals).length) {
         return [...this.animals].filter(item => this.filter.includes(item.groupID))
       } else {
         return [...this.animals]
@@ -241,13 +192,20 @@ export default {
     },
     arrfilter () {
       return this.$store.getters.filter
-    }
+    },
+    ...mapGetters(['animals'])
   },
   methods: {
     detailAnimal (index) {
-      this.animal = this.animals[index]
+      this.animal = this.filtredAnimals[index]
       this.active = true
-    }
+      document.body.classList.add('overflow')
+    },
+    detailClose () {
+      this.active = !this.active
+      document.body.classList.remove('overflow')
+    },
+    ...mapActions(['fetchAnimals'])
   }
 }
 </script>

@@ -4,21 +4,30 @@
       <Loader v-if="loading"/>
     </transition>
     <transition name="fade" mode="out-in">
-      <router-view v-if="appReady" />
+      <component :is="layout">
+        <router-view v-if="appReady" />
+      </component>
     </transition>
   </div>
 </template>
 
 <script>
 import Loader from '@/components/Loader.vue'
+import MainLayout from '@/layouts/MainLayout'
+import NoLayout from '@/layouts/NoLayout'
 
 export default {
   name: 'petApp',
-  components: { Loader },
+  components: { Loader, MainLayout, NoLayout },
   data: () => ({
     appReady: false,
     loading: true
   }),
+  computed: {
+    layout () {
+      return this.$route.meta.layout
+    }
+  },
   created () {
     this.$router.beforeEach((to, from, next) => {
       this.loading = true
