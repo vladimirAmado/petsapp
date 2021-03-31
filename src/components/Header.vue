@@ -17,7 +17,7 @@
             fill="#ff5f54"
           />
         </svg>
-        <span> {{ info.country }}, {{ info.city }} </span>
+        <span> {{ location }} </span>
         <svg
           class="navbar__location_delete"
           width="17"
@@ -62,7 +62,7 @@
         </template>
       </vs-tooltip>
     </nav>
-    <div class="header-search">
+    <div class="header-search" v-if="useSearch">
       <input
         placeholder="Search"
         v-model="search"
@@ -86,6 +86,23 @@
         </svg>
       </button>
     </div>
+    <div class="title">
+      <svg
+        width="19"
+        height="19"
+        viewBox="0 0 19 19"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M4 8C6.20914 8 8 6.20914 8 4C8 1.79086 6.20914 0 4 0C1.79086 0 0 1.79086 0 4C0 6.20914 1.79086 8 4 8ZM4 19C6.20914 19 8 17.2091 8 15C8 12.7909 6.20914 11 4 11C1.79086 11 0 12.7909 0 15C0 17.2091 1.79086 19 4 19ZM19 4C19 6.20914 17.2091 8 15 8C12.7909 8 11 6.20914 11 4C11 1.79086 12.7909 0 15 0C17.2091 0 19 1.79086 19 4ZM15 19C17.2091 19 19 17.2091 19 15C19 12.7909 17.2091 11 15 11C12.7909 11 11 12.7909 11 15C11 17.2091 12.7909 19 15 19Z"
+          fill="#212330"
+        />
+      </svg>
+      <h1>{{title}}</h1>
+    </div>
   </header>
 </template>
 
@@ -102,8 +119,21 @@ export default {
     }
   },
   computed: {
+    location () {
+      if (this.info.country && this.info.city) {
+        return this.info.country + ', ' + this.info.city
+      } else {
+        return 'You\'r location'
+      }
+    },
     info () {
       return this.$store.getters.info
+    },
+    useSearch () {
+      return this.$route.meta.search
+    },
+    title () {
+      return this.$route.name
     }
   },
   methods: {

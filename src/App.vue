@@ -15,6 +15,7 @@
 import Loader from '@/components/Loader.vue'
 import MainLayout from '@/layouts/MainLayout'
 import NoLayout from '@/layouts/NoLayout'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'petApp',
@@ -43,6 +44,11 @@ export default {
       this.loading = false
       this.appReady = true
     }, 1000)
+    this.fetchCities()
+    this.fetchCountries()
+  },
+  methods: {
+    ...mapActions(['fetchCities', 'fetchCountries'])
   }
 }
 </script>

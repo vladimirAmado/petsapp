@@ -26,19 +26,19 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    meta: { auth: true, layout: 'MainLayout' },
+    meta: { auth: true, layout: 'MainLayout', search: true },
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/messages',
-    name: 'messages',
-    meta: { auth: true, layout: 'MainLayout' },
-    component: () => import('../views/Messages.vue')
+    path: '/pet',
+    name: 'Pet',
+    meta: { auth: true, layout: 'MainLayout', search: false },
+    component: () => import('../views/Pet.vue')
   },
   {
     path: '/favorite',
     name: 'Favorite',
-    meta: { auth: true, layout: 'MainLayout' },
+    meta: { auth: true, layout: 'MainLayout', search: false },
     component: () => import('../views/Favorite.vue')
   },
   {
@@ -60,7 +60,7 @@ router.beforeEach((to, form, next) => {
   const requiredAuth = to.matched.some(record => record.meta.auth)
   if (!currentUser && requiredAuth) {
     next('/login?message=auth')
-  } else if (to.path === '/login' && currentUser) {
+  } else if ((to.path === '/login' || to.path === '/' || to.path === '/register') && currentUser) {
     next('/home')
   } else {
     next()

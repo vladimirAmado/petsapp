@@ -106,7 +106,7 @@
         <transition name="slide-fade" mode="in-out">
           <div class="slide-wrapper" v-if="step === 3">
             <div class="register-form__inputs inputs">
-              <v-select name='country' :class="{'input_error': ($v.country.$dirty && !$v.country.required), 'input_correct': !$v.country.$invalid}" v-model="country" :options="sortedCountries" :reduce="country => ({ code: country.code, name: country.name })" label="name"></v-select>
+              <v-select name='country' :class="{'input_error': ($v.country.$dirty && !$v.country.required), 'input_correct': !$v.country.$invalid}" v-model="country" :options="countries" :reduce="country => ({ code: country.code, name: country.name })" label="name"></v-select>
               <label
                 :class="{'label_active': $v.country.$model}"
                 class="register-form__label label"
@@ -169,6 +169,7 @@
 
 <script>
 import { required, email, sameAs, minLength } from 'vuelidate/lib/validators'
+import { mapGetters } from 'vuex'
 import messages from '@/plugins/messages'
 export default {
   name: 'Register',
@@ -180,16 +181,11 @@ export default {
     password: '',
     confirmPassword: '',
     country: '',
-    countries: [],
-    city: '',
-    cities: []
+    city: ''
   }),
   computed: {
-    sortedCountries () {
-      return [...this.countries].sort((a, b) => a.name.localeCompare(b.name))
-    },
     sortedCities () {
-      return [...this.cities].sort((a, b) => a.name.localeCompare(b.name)).filter(city => city.country_code === this.country.code)
+      return [...this.cities].filter(city => city.country_code === this.country.code)
     },
     successEmail: function () {
       if (!this.$v.email.$invalid) {
@@ -229,7 +225,8 @@ export default {
     },
     error () {
       return this.$store.getters.error
-    }
+    },
+    ...mapGetters(['countries', 'cities'])
   },
   watch: {
     country: function () {
@@ -246,16 +243,6 @@ export default {
     if (messages[this.$route.query.message]) {
       this.$message(messages[this.$route.query.message])
     }
-    fetch('https://vladimiramado.github.io/data/cities.json')
-      .then(response => response.json())
-      .then(json => {
-        this.cities = json
-      })
-    fetch('https://vladimiramado.github.io/data/countries.json')
-      .then(response => response.json())
-      .then(json => {
-        this.countries = json
-      })
   },
   validations: {
     name: { required },

@@ -15,27 +15,12 @@
         flex-direction: row
         list-style: none
         justify-content: space-between
+        align-items: center
         width: 100%
-        padding: 20px 30px 35px
+        padding: 0 30px
         height: 100%
     &__item
-        font-size: 0
-        padding: 4px 12px
         &_active
-            font-size: 14px
-            background: #ff5f54
-            border-radius: 16px
             & i svg path
                 stroke: #fff
-        &:first-child:not(.navbar__item_active) i svg path
-            stroke: #3C3C43
-    &__link
-        text-decoration: none
-        color: #fff
-        font-style: normal
-        font-weight: normal
-        line-height: 22px
-        display: flex
-        align-items: center
-        & i
-            margin-right: 10px
+                fill: #ff5f54

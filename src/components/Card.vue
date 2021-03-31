@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="loading">
+    <div v-if="loadingAnimals">
       <div class="card-list">
         <div class="card card_loading" v-for="n in 10" :key="n"></div>
       </div>
@@ -166,15 +166,11 @@ export default {
   data: () => ({
     active: false,
     filter: [],
-    animal: [],
-    loading: true
+    animal: []
   }),
   async mounted () {
     if (!Object.keys(this.animals).length) {
-      try {
-        await this.fetchAnimals()
-        this.loading = false
-      } catch (error) {}
+      await this.fetchAnimals()
     }
   },
   watch: {
@@ -185,15 +181,15 @@ export default {
   computed: {
     filtredAnimals () {
       if (this.filter.length !== 0 && Object.keys(this.animals).length) {
-        return [...this.animals].filter(item => this.filter.includes(item.groupID))
+        return this.animals.filter(item => this.filter.includes(item.groupID))
       } else {
-        return [...this.animals]
+        return this.animals
       }
     },
     arrfilter () {
       return this.$store.getters.filter
     },
-    ...mapGetters(['animals'])
+    ...mapGetters(['animals', 'loadingAnimals'])
   },
   methods: {
     detailAnimal (index) {

@@ -2,18 +2,16 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './auth'
 import info from './info'
+import animals from './animals'
+import data from './data'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    error: null,
-    filter: []
+    error: null
   },
   mutations: {
-    setFilter (state, filter) {
-      state.filter = filter
-    },
     setError (state, error) {
       state.error = error
     },
@@ -22,12 +20,11 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    error: s => s.error,
-    filter: s => s.filter
+    error: s => s.error
   },
   actions: {
   },
   modules: {
-    auth, info
+    auth, info, animals, data
   }
 })
