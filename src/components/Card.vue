@@ -125,7 +125,7 @@
         <div class="card-detail__tags">
           <div class="card-detail__tag">
             <span>Age</span>
-            <p>{{animal.age}}</p>
+            <p>{{age}}</p>
           </div>
           <div class="card-detail__tag">
             <span>Weight</span>
@@ -181,10 +181,27 @@ export default {
   computed: {
     filtredAnimals () {
       if (this.filter.length !== 0 && Object.keys(this.animals).length) {
-        return this.animals.filter(item => this.filter.includes(item.groupID))
+        const arr = Object.keys(this.animals).filter(item => this.filter.includes(this.animals[item].groupID))
+        return arr.reduce((acc, item) => {
+          acc[item] = this.animals[item]
+          return acc
+        }, {})
       } else {
         return this.animals
       }
+    },
+    age () {
+      const now = new Date()
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      const dob = new Date('2019-02-13')
+      const dobnow = new Date(today.getFullYear(), dob.getMonth(), dob.getDate())
+      let age
+      const mounth = today.getMonth() - dob.getMonth()
+      age = today.getFullYear() - dob.getFullYear()
+      if (today < dobnow) {
+        age = age - 1
+      }
+      return `${age}год ${mounth} месяца`
     },
     arrfilter () {
       return this.$store.getters.filter
