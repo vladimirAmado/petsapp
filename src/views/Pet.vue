@@ -3,8 +3,18 @@
         <form v-on:submit.prevent="onSubmit()" class="form-pet">
           <div class="form-pet__container">
             <div class="inputs">
-              <input class="input" type="text" name="name" id="name" v-model="name">
-              <label class="label" :class="{'label_active': $v.name.$model}" for="name">Name</label>
+              <input
+                class="input"
+                type="text"
+                name="name"
+                id="name"
+                v-model="name"
+                :class="{
+                  'input_error': ($v.name.$dirty && !$v.name.required),
+                  'input_correct': !$v.name.$invalid
+                }"
+              >
+              <label class="label" :class="{'label_active': $v.name.$model}" for="name">Имя</label>
             </div>
             <div class="inputs">
               <v-select
@@ -21,32 +31,78 @@
                 :class="{'label_active': $v.group.$model}"
                 class="register-form__label label"
                 for="group">
-                group
+                Тип питомца
               </label>
             </div>
             <div class="inputs">
-              <input class="input" type="text" name="type" id="type" v-model="type">
-              <label class="label" :class="{'label_active': $v.type.$model}"  for="type">Type</label>
+              <input type="file" name="file" id="file" ref="file" accept="image/*" v-on:change="handleFileUpload()">
             </div>
             <div class="inputs">
-              <textarea class="input" name="description" id="description" v-model="description"/>
-              <label class="label" :class="{'label_active': $v.description.$model}" for="description">Description</label>
+              <input
+                :class="{
+                  'input_error': ($v.type.$dirty && !$v.type.required),
+                  'input_correct': !$v.type.$invalid
+                }"
+                class="input"
+                type="text"
+                name="type"
+                id="type"
+                v-model="type"
+              >
+              <label class="label" :class="{'label_active': $v.type.$model}"  for="type">Парода</label>
             </div>
             <div class="inputs">
-              <input type='date' class="input" name="birthdate" id="birthdate" v-model="birthdate"/>
-              <label class="label label_active" for="birthdate">Birthdate</label>
+              <textarea
+                class="input"
+                name="description"
+                id="description"
+                v-model="description"
+                :class="{
+                  'input_error': ($v.description.$dirty && !$v.description.required),
+                  'input_correct': !$v.description.$invalid
+                }"
+              />
+              <label class="label" :class="{'label_active': $v.description.$model}" for="description">Описание</label>
             </div>
             <div class="inputs">
-              <input type='number' step="0.1" max="100" class="input" name="weigth" id="weigth" v-model="weigth"/>
-              <label class="label" :class="{'label_active': $v.weigth.$model}" for="weigth">Weigth</label>
+              <input
+                :class="{
+                  'input_error': ($v.birthdate.$dirty && !$v.birthdate.required),
+                  'input_correct': !$v.birthdate.$invalid
+                }"
+                type='date'
+                class="input"
+                name="birthdate"
+                id="birthdate"
+                v-model="birthdate"
+              />
+              <label class="label label_active" for="birthdate">Дата рождения</label>
             </div>
             <div class="inputs">
+              <input
+                type='number'
+                step="0.1"
+                max="100"
+                min="0.1"
+                class="input"
+                name="weigth"
+                id="weigth"
+                v-model="weigth"
+                :class="{
+                  'input_error': ($v.weigth.$dirty && !$v.weigth.required),
+                  'input_correct': !$v.weigth.$invalid
+                }"
+              />
+              <label class="label" :class="{'label_active': $v.weigth.$model}" for="weigth">Вес</label>
+            </div>
+            <div class="inputs inputs-switch">
+              <label for="switch">Пол</label>
               <vs-switch v-model="sex">
                 <template #off>
-                    male
+                    <i class='bx bx-male-sign'></i>
                 </template>
                 <template #on>
-                    female
+                    <i class='bx bx-female-sign'></i>
                 </template>
               </vs-switch>
             </div>
@@ -78,6 +134,7 @@
 // eslint-disable-next-line no-unused-vars
 import { required, numeric, between, minLength } from 'vuelidate/lib/validators'
 import { mapGetters } from 'vuex'
+import firebase from 'firebase/app'
 
 export default {
   name: 'PetForm',
@@ -104,22 +161,16 @@ export default {
         id: 5
       }
     ],
-    group: 2,
-    type: 'Шотландский вислоухий',
-    name: 'БОБ',
-    description: 'Любит спать, кушать и вставать в всратые позы',
-    birthdate: '2019-02-13',
-    weigth: 3,
-    switch: false,
-    img: '',
-    country: {
-      code: 'RU',
-      name: 'Россия'
-    },
-    city: {
-      code: 'RU',
-      name: 'Пермь'
-    }
+    group: '',
+    type: '',
+    name: '',
+    file: '',
+    description: '',
+    birthdate: '',
+    weigth: '',
+    sex: false,
+    country: '',
+    city: ''
   }),
   validations: {
     group: { required },
@@ -135,7 +186,7 @@ export default {
       required,
       between: between(0, 100)
     },
-    switch: { required },
+    sex: { required },
     city: { required },
     country: { required }
   },
@@ -152,33 +203,43 @@ export default {
       return this.country.name + ', ' + this.city.name
     },
     sortedCities () {
-      return [...this.cities].filter(city => city.country_code === this.country.code)
+      return this.cities.filter(city => city.country_code === this.country.code)
     },
     ...mapGetters(['countries', 'cities'])
   },
   methods: {
-    sex () {
-      if (!this.switch) {
-        return 'Male'
-      } else {
-        return 'Female'
-      }
+    handleFileUpload () {
+      this.imageData = this.$refs.file.files[0]
+      this.onUpload()
+    },
+    onUpload () {
+      this.picture = null
+      const storageRef = firebase.storage().ref(`/images/${this.imageData.name}`).put(this.imageData)
+      storageRef.on('state_changed', snapshot => {
+        this.uploadValue = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      }, error => { console.log(error.message) },
+      () => {
+        this.uploadValue = 100
+        storageRef.snapshot.ref.getDownloadURL().then((url) => {
+          this.file = url
+        })
+      })
     },
     async onSubmit () {
       const formData = {
         name: this.name,
         age: this.birthdate,
         location: this.location,
-        sex: this.sex(),
+        sex: this.sex,
         weigth: this.weigth,
         type: this.type,
         groupID: this.group,
         about: this.description,
-        img: this.img
+        img: this.file
       }
-      console.log(formData)
       try {
         await this.$store.dispatch('addAnimal', formData)
+        this.$v.$reset()
       } catch (error) {}
     }
   }

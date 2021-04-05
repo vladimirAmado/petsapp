@@ -45,6 +45,7 @@ export default {
           about: about,
           img: img
         })
+        dispatch('fetchAnimals')
       } catch (e) {
         commit('setError', e)
         throw e
