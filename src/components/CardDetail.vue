@@ -44,7 +44,7 @@
         </div>
         <div class="card-detail__tag">
           <span>Weight</span>
-          <p>{{ detail.weigth }}</p>
+          <p>{{ detail.weight }}</p>
         </div>
         <div class="card-detail__tag">
           <span>Sex</span>

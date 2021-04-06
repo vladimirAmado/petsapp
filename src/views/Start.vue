@@ -1,7 +1,7 @@
 <template>
-  <div class="home-block">
-    <div class="home-block__background">
-      <div class="home-block__background-lines">
+  <section class="home-block">
+    <div class="home-block-background">
+      <div class="home-block-background__lines">
         <svg
           width="100%"
           height="409"
@@ -52,15 +52,15 @@
         </svg>
       </div>
     </div>
-    <div class="home-block__top">
-      <h1 class="home-block__top-title">
-        <span>My </span>Pets
+    <div class="home-block-top">
+      <h1 class="home-block-top__title">
+        <span>My</span> Pets
       </h1>
-      <p class="home-block__top-desc">
+      <p class="home-block-top__desc">
         Taking care of a pet is my favorite, it helps me to gaimr stress and fatigue.
       </p>
     </div>
-    <div class="home-block__image-wrap">
+    <div class="home-block-image__wrap">
       <svg
         width="100%"
         height="100%"
@@ -259,21 +259,23 @@
         </defs>
       </svg>
     </div>
-    <div class="home-block__bottom">
-      <router-link
-        to="/login"
+    <div class="home-block-bottom">
+      <vs-button
+        color="#ff5f54"
         class="btn btn_rounded"
+        to="/login"
+
       >
         Sign in
-      </router-link>
+      </vs-button>
       <router-link
         to="/register"
-        class="home-block__bottom-link"
+        class="home-block-bottom__link"
       >
         Create an account
       </router-link>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

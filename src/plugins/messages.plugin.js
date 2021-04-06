@@ -4,7 +4,7 @@ export default {
       this.$vs.notification({
         position: 'top-right',
         color: 'success',
-        title: 'Успех',
+        title: 'Уведомление',
         text: `${text}`
       })
     }
@@ -13,7 +13,7 @@ export default {
       this.$vs.notification({
         position: 'top-right',
         color: 'danger',
-        title: 'Ошибка',
+        title: 'Что-то пошло не так',
         text: `${text}`
       })
     }

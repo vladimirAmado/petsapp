@@ -16,8 +16,8 @@ export default {
         const uid = await dispatch('getUid')
         await firebase.database().ref(`/users/${uid}/info`).set({
           name: name,
-          city: city,
-          country: country
+          city: city.name,
+          country: country.name
         })
       } catch (e) {
         commit('setError', e)

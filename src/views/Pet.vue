@@ -87,13 +87,13 @@
                 class="input"
                 name="weigth"
                 id="weigth"
-                v-model="weigth"
+                v-model="weight"
                 :class="{
-                  'input_error': ($v.weigth.$dirty && !$v.weigth.required),
-                  'input_correct': !$v.weigth.$invalid
+                  'input_error': ($v.weight.$dirty && !$v.weight.required),
+                  'input_correct': !$v.weight.$invalid
                 }"
               />
-              <label class="label" :class="{'label_active': $v.weigth.$model}" for="weigth">Вес</label>
+              <label class="label" :class="{'label_active': $v.weight.$model}" for="weight">Вес</label>
             </div>
             <div class="inputs inputs-switch">
               <label for="switch">Пол</label>
@@ -124,7 +124,7 @@
                 Выберите город
               </label>
             </div>
-          <button class="btn btn_rounded">Add a pet</button>
+          <button class="btn btn_secondary">Add a pet</button>
           </div>
         </form>
     </section>
@@ -167,7 +167,7 @@ export default {
     file: '',
     description: '',
     birthdate: '',
-    weigth: '',
+    weight: '',
     sex: false,
     country: '',
     city: ''
@@ -181,7 +181,7 @@ export default {
     },
     description: { required },
     birthdate: { required },
-    weigth: {
+    weight: {
       numeric,
       required,
       between: between(0, 100)
@@ -231,7 +231,7 @@ export default {
         age: this.birthdate,
         location: this.location,
         sex: this.sex,
-        weigth: this.weigth,
+        weight: this.weight,
         type: this.type,
         groupID: this.group,
         about: this.description,

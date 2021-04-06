@@ -31,7 +31,7 @@ export default {
         commit('loadingAnimals', false)
       } catch (error) { }
     },
-    async addAnimal ({ dispatch, commit }, { name, age, location, sex, weigth, type, groupID, about, img }) {
+    async addAnimal ({ dispatch, commit }, { name, age, location, sex, weight, type, groupID, about, img }) {
       try {
         const uid = await dispatch('guidGenerator')
         await firebase.database().ref(`animals/${uid}/`).set({
@@ -39,7 +39,7 @@ export default {
           age: age,
           location: location,
           sex: sex,
-          weigth: weigth,
+          weight: weight,
           type: type,
           groupID: groupID,
           about: about,

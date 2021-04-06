@@ -76,13 +76,13 @@
 <script>
 import { required, email } from 'vuelidate/lib/validators'
 import messages from '@/plugins/messages'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
   data: () => ({
     email: '',
     password: '',
-    loading: false,
     hasVisiblePassword: false
   }),
   watch: {
@@ -92,7 +92,7 @@ export default {
   },
   computed: {
     error () {
-      return this.$store.getters.error
+      return this.error
     },
     successEmail: function () {
       if (!this.$v.email.$invalid) {
@@ -111,7 +111,8 @@ export default {
       } else {
         return ''
       }
-    }
+    },
+    ...mapGetters(['error'])
   },
   validations: {
     email: { required, email },
@@ -133,10 +134,11 @@ export default {
         password: this.password
       }
       try {
-        await this.$store.dispatch('login', formData)
+        await this.login(formData)
         this.$router.push('/home?message=login')
       } catch (error) {}
-    }
+    },
+    ...mapActions(['login'])
   }
 }
 </script>
