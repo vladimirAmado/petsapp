@@ -4,7 +4,7 @@
       <div class="card__head-img" v-if="animal.img">
         <img :src="animal.img" alt="" />
       </div>
-      <div class="card__head-btn card__head-btn_added">
+      <div class="card__head-btn" :class="{ 'card__head-btn_added' : isFavorite }" v-on:click="favorite(index)">
         <svg
           width="19"
           height="18"
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Card',
   props: {
@@ -91,9 +92,17 @@ export default {
       default: null
     },
     detailAnimal: {},
-    index: {}
+    index: {},
+    favorite: {}
   },
   computed: {
+    isFavorite () {
+      if (this.animal.users) {
+        return Object.values(this.animal.users).includes(this.auth)
+      } else {
+        return false
+      }
+    },
     year () {
       const now = new Date()
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -121,7 +130,8 @@ export default {
         tag = false
       }
       return tag
-    }
+    },
+    ...mapGetters(['auth'])
   }
 }
 </script>

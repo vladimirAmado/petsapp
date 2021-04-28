@@ -17,7 +17,7 @@
           />
         </svg>
       </div>
-      <div class="card-detail__favorite">
+      <div class="card-detail__favorite" :class="{ 'card-detail__favorite_added' : isFavorite }" v-on:click="favorite(animalId)">
         <svg
           width="19"
           height="18"
@@ -61,7 +61,13 @@
         </div>
       </div>
       <div class="card-detail__footer">
-        <a href="#" class="btn btn_rounded">Adopt</a>
+        <vs-button
+          color="#ff5f54"
+          type="button"
+          class="btn btn_rounded"
+        >
+          Adopt
+        </vs-button>
         <a href="tel:" class="btn btn_rounded btn_icon">
           <svg
             width="18"
@@ -84,9 +90,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'CardDetail',
-  props: ['detail', 'active', 'detailClose'],
+  props: ['detail', 'active', 'detailClose', 'animalId', 'favorite'],
   computed: {
     sex () {
       if (this.detail.sex === true) {
@@ -111,7 +118,15 @@ export default {
       mounth = this.monthDiff(dob, today) % 12
       const age = (year === 0 ? '' : year += ' ' + this.plural(year, years) + '<br>') + (mounth === 0 ? '' : mounth += ' ' + this.plural(mounth, mounths))
       return age
-    }
+    },
+    isFavorite () {
+      if (this.detail.users) {
+        return Object.values(this.detail.users).includes(this.auth)
+      } else {
+        return false
+      }
+    },
+    ...mapGetters(['auth'])
   },
   methods: {
     plural (num, titles) {

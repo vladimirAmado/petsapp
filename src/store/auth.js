@@ -1,6 +1,17 @@
 import firebase from 'firebase/app'
 
 export default {
+  state: {
+    auth: {}
+  },
+  mutations: {
+    setAuth (state, auth) {
+      state.auth = auth
+    },
+    clearAuth (state) {
+      state.auth = {}
+    }
+  },
   actions: {
     async login ({ dispatch, commit }, { email, password }) {
       try {
@@ -24,13 +35,21 @@ export default {
         throw e
       }
     },
-    getUid () {
+
+    getUid ({ dispatch, commit }) {
       const user = firebase.auth().currentUser
+      if (user) {
+        commit('setAuth', user.uid)
+      }
       return user ? user.uid : null
     },
     async logout ({ commit }) {
       await firebase.auth().signOut()
       commit('clearInfo')
+      commit('clearAuth')
     }
+  },
+  getters: {
+    auth: s => s.auth
   }
 }

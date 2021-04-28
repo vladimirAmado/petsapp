@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import firebase from 'firebase/app'
 
 export default {
@@ -18,23 +19,43 @@ export default {
     }
   },
   actions: {
-    async guidGenerator () {
-      var S4 = function () {
-        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1)
-      }
-      return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4())
-    },
     async fetchAnimals ({ dispatch, commit }) {
       try {
         const info = (await firebase.database().ref('/animals/').once('value')).val()
         commit('setAnimals', info)
         commit('loadingAnimals', false)
-      } catch (error) { }
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
+    async addFavorite ({ dispatch, commit }, { animalId, uid }) {
+      try {
+        await firebase.database().ref(`animals/${animalId}/users/`).push().set(uid)
+        dispatch('fetchAnimals')
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
+    },
+    async removeFavorite ({ dispatch, commit }, { animalId, key }) {
+      try {
+        await firebase.database().ref(`animals/${animalId}/users/`).child(key).remove()
+          .then(function () {
+            console.log('Remove succeeded.')
+          })
+          .catch(function (error) {
+            console.log('Remove failed: ' + error.message)
+          })
+        dispatch('fetchAnimals')
+      } catch (e) {
+        commit('setError', e)
+        throw e
+      }
     },
     async addAnimal ({ dispatch, commit }, { name, age, location, sex, weight, type, groupID, about, img }) {
       try {
-        const uid = await dispatch('guidGenerator')
-        await firebase.database().ref(`animals/${uid}/`).set({
+        await firebase.database().ref('animals/').push().set({
           name: name,
           age: age,
           location: location,

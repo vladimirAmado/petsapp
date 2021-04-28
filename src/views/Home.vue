@@ -14,13 +14,14 @@
         :animal="animal"
         :index="index"
         :detailAnimal="detailAnimal"
+        :favorite="favorite"
       />
       </div>
       <h3 v-else>
         Хмм. Похоже, животные, которых вы ищете, ускользнули. Простите за это. Как странно...
       </h3>
     </div>
-    <CardDetail :detailClose="detailClose" :active="active" :detail="animal"/>
+    <CardDetail :detailClose="detailClose" :active="active" :detail="animal" :animalId="animalId" :favorite="favorite"/>
   </section>
 </template>
 
@@ -36,7 +37,8 @@ export default {
   data: () => ({
     active: false,
     filter: [],
-    animal: []
+    animal: [],
+    animalId: null
   }),
   async mounted () {
     if (!Object.keys(this.animals).length) {
@@ -66,11 +68,12 @@ export default {
     arrfilter () {
       return this.$store.getters.filter
     },
-    ...mapGetters(['animals', 'loadingAnimals'])
+    ...mapGetters(['animals', 'loadingAnimals', 'auth'])
   },
   methods: {
     detailAnimal (index) {
       this.animal = this.filtredAnimals[index]
+      this.animalId = index
       this.active = true
       document.body.classList.add('overflow')
     },
@@ -78,7 +81,29 @@ export default {
       this.active = !this.active
       document.body.classList.remove('overflow')
     },
-    ...mapActions(['fetchAnimals'])
+    favorite (animalId) {
+      const data = {
+        animalId: animalId,
+        uid: this.auth
+      }
+      if (this.animals[animalId].users) {
+        let isFavorite
+        for (const [key, value] of Object.entries(this.animals[animalId].users)) {
+          if (value === this.auth) {
+            isFavorite = key
+          }
+        }
+        data.key = isFavorite
+        if (isFavorite) {
+          this.removeFavorite(data)
+        } else {
+          this.addFavorite(data)
+        }
+      } else {
+        this.addFavorite(data)
+      }
+    },
+    ...mapActions(['fetchAnimals', 'addFavorite', 'removeFavorite'])
   },
   components: {
     Card, Cardfilter, CardDetail
