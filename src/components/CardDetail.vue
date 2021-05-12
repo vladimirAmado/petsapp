@@ -120,13 +120,13 @@ export default {
       return age
     },
     isFavorite () {
-      if (this.detail.users) {
-        return Object.values(this.detail.users).includes(this.auth)
+      if (this.animalId && this.animals[this.animalId].users) {
+        return Object.values(this.animals[this.animalId].users).includes(this.auth)
       } else {
         return false
       }
     },
-    ...mapGetters(['auth'])
+    ...mapGetters(['auth', 'animals'])
   },
   methods: {
     plural (num, titles) {

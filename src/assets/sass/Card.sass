@@ -13,13 +13,13 @@
     display: flex
     flex-direction: column
     overflow: hidden
-    cursor: pointer
     &_loading
         height: 240px
         background: #9e9e9e24
     &__head
         height: 130px
         position: relative
+        cursor: pointer
         &-img
             height: 100%
             display: flex
@@ -43,11 +43,13 @@
             align-items: center
             justify-content: center
             cursor: pointer
+            z-index: 2
             &_added svg path
                 fill: #ff5f54
     &__bottom
         height: 50%
         padding: 10px 10px 15px
+        cursor: pointer
         &-sex
             display: flex
             justify-content: space-between
@@ -96,7 +98,7 @@
     top: 0
     left: 0
     width: 100%
-    z-index: 1
+    z-index: 3
     background: #fff
     transform: translateX(-100%)
     transition: 0.35s ease-in-out

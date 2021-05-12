@@ -8,27 +8,27 @@
                 type="text"
                 name="name"
                 id="name"
-                v-model="name"
+                v-model="formData.name"
                 :class="{
-                  'input_error': ($v.name.$dirty && !$v.name.required),
-                  'input_correct': !$v.name.$invalid
+                  'input_error': ($v.formData.name.$dirty && !$v.formData.name.required),
+                  'input_correct': !$v.formData.name.$invalid
                 }"
               >
-              <label class="label" :class="{'label_active': $v.name.$model}" for="name">Имя</label>
+              <label class="label" :class="{'label_active': $v.formData.name.$model}" for="name">Имя</label>
             </div>
             <div class="inputs">
               <v-select
                 :class="{
-                  'input_error': ($v.group.$dirty && !$v.group.required),
-                  'input_correct': !$v.group.$invalid
+                  'input_error': ($v.formData.group.$dirty && !$v.formData.group.required),
+                  'input_correct': !$v.formData.group.$invalid
                 }"
-                v-model="group"
+                v-model="formData.group"
                 :options="groups"
                 :reduce="group => group.id"
                 label="name">
               </v-select>
               <label
-                :class="{'label_active': $v.group.$model}"
+                :class="{'label_active': $v.formData.group.$model}"
                 class="register-form__label label"
                 for="group">
                 Тип питомца
@@ -40,41 +40,41 @@
             <div class="inputs">
               <input
                 :class="{
-                  'input_error': ($v.type.$dirty && !$v.type.required),
-                  'input_correct': !$v.type.$invalid
+                  'input_error': ($v.formData.type.$dirty && !$v.formData.type.required),
+                  'input_correct': !$v.formData.type.$invalid
                 }"
                 class="input"
                 type="text"
                 name="type"
                 id="type"
-                v-model="type"
+                v-model="formData.type"
               >
-              <label class="label" :class="{'label_active': $v.type.$model}"  for="type">Парода</label>
+              <label class="label" :class="{'label_active': $v.formData.type.$model}"  for="type">Парода</label>
             </div>
             <div class="inputs">
               <textarea
                 class="input"
                 name="description"
                 id="description"
-                v-model="description"
+                v-model="formData.description"
                 :class="{
-                  'input_error': ($v.description.$dirty && !$v.description.required),
-                  'input_correct': !$v.description.$invalid
+                  'input_error': ($v.formData.description.$dirty && !$v.formData.description.required),
+                  'input_correct': !$v.formData.description.$invalid
                 }"
               />
-              <label class="label" :class="{'label_active': $v.description.$model}" for="description">Описание</label>
+              <label class="label" :class="{'label_active': $v.formData.description.$model}" for="description">Описание</label>
             </div>
             <div class="inputs">
               <input
                 :class="{
-                  'input_error': ($v.birthdate.$dirty && !$v.birthdate.required),
-                  'input_correct': !$v.birthdate.$invalid
+                  'input_error': ($v.formData.birthdate.$dirty && !$v.formData.birthdate.required),
+                  'input_correct': !$v.formData.birthdate.$invalid
                 }"
                 type='date'
                 class="input"
                 name="birthdate"
                 id="birthdate"
-                v-model="birthdate"
+                v-model="formData.birthdate"
               />
               <label class="label label_active" for="birthdate">Дата рождения</label>
             </div>
@@ -87,17 +87,17 @@
                 class="input"
                 name="weigth"
                 id="weigth"
-                v-model="weight"
+                v-model="formData.weight"
                 :class="{
-                  'input_error': ($v.weight.$dirty && !$v.weight.required),
-                  'input_correct': !$v.weight.$invalid
+                  'input_error': ($v.formData.weight.$dirty && !$v.formData.weight.required),
+                  'input_correct': !$v.formData.weight.$invalid
                 }"
               />
-              <label class="label" :class="{'label_active': $v.weight.$model}" for="weight">Вес</label>
+              <label class="label" :class="{'label_active': $v.formData.weight.$model}" for="weight">Вес</label>
             </div>
             <div class="inputs inputs-switch">
               <label for="switch">Пол</label>
-              <vs-switch v-model="sex">
+              <vs-switch v-model="formData.sex">
                 <template #off>
                     <i class='bx bx-male-sign'></i>
                 </template>
@@ -107,24 +107,30 @@
               </vs-switch>
             </div>
              <div class="inputs">
-              <v-select name='country' :class="{'input_error': ($v.country.$dirty && !$v.country.required), 'input_correct': !$v.country.$invalid}" v-model="country" :options="countries" :reduce="country => ({ code: country.code, name: country.name })" label="name"></v-select>
+              <v-select name='country' :class="{'input_error': ($v.formData.country.$dirty && !$v.formData.country.required), 'input_correct': !$v.formData.country.$invalid}" v-model="formData.country" :options="countries" :reduce="country => ({ code: country.code, name: country.name })" label="name"></v-select>
               <label
-                :class="{'label_active': $v.country.$model}"
+                :class="{'label_active': $v.formData.country.$model}"
                 class="label"
                 for="country">
                 Выберите страну
               </label>
             </div>
             <div class="inputs">
-              <v-select :class="{'input_error': ($v.city.$dirty && !$v.city.required), 'input_correct': !$v.city.$invalid}" v-model="city" :options="sortedCities" :reduce="city => ({ code: city.country_code, name: city.name })" label="name"></v-select>
+              <v-select :class="{'input_error': ($v.formData.city.$dirty && !$v.formData.city.required), 'input_correct': !$v.formData.city.$invalid}" v-model="formData.city" :options="sortedCities" :reduce="city => ({ code: city.country_code, name: city.name })" label="name"></v-select>
               <label
-                :class="{'label_active': $v.city.$model}"
+                :class="{'label_active': $v.formData.city.$model}"
                 class="label"
                 for="country">
                 Выберите город
               </label>
             </div>
-          <button class="btn btn_secondary">Add a pet</button>
+            <vs-button
+              color="#ff5f54"
+              type="submit"
+              class="btn btn_rounded"
+            >
+              Add a pet
+            </vs-button>
           </div>
         </form>
     </section>
@@ -161,49 +167,55 @@ export default {
         id: 5
       }
     ],
-    group: '',
-    type: '',
-    name: '',
-    file: '',
-    description: '',
-    birthdate: '',
-    weight: '',
-    sex: false,
-    country: '',
-    city: ''
+    formData: {
+      group: '',
+      type: '',
+      name: '',
+      file: '',
+      description: '',
+      birthdate: '',
+      weight: '',
+      sex: false,
+      country: '',
+      city: ''
+    }
   }),
   validations: {
-    group: { required },
-    type: { required },
-    name: {
-      required,
-      minLength: minLength(3)
-    },
-    description: { required },
-    birthdate: { required },
-    weight: {
-      numeric,
-      required,
-      between: between(0, 100)
-    },
-    sex: { required },
-    city: { required },
-    country: { required }
+    formData: {
+      group: { required },
+      type: { required },
+      name: {
+        required,
+        minLength: minLength(3)
+      },
+      description: { required },
+      birthdate: {
+        required
+      },
+      weight: {
+        numeric,
+        required,
+        between: between(0, 100)
+      },
+      sex: { required },
+      city: { required },
+      country: { required }
+    }
   },
   watch: {
     country: function () {
-      if (this.country === null) {
-        this.country = ''
-        this.city = ''
+      if (this.formData.country === null) {
+        this.formData.country = ''
+        this.formData.city = ''
       }
     }
   },
   computed: {
     location () {
-      return this.country.name + ', ' + this.city.name
+      return this.formData.country.name + ', ' + this.formData.city.name
     },
     sortedCities () {
-      return this.cities.filter(city => city.country_code === this.country.code)
+      return this.cities.filter(city => city.country_code === this.formData.country.code)
     },
     ...mapGetters(['countries', 'cities'])
   },
@@ -226,20 +238,36 @@ export default {
       })
     },
     async onSubmit () {
+      if (this.$v.formData.$invalid) {
+        this.$v.formData.$touch()
+        return
+      }
       const formData = {
-        name: this.name,
-        age: this.birthdate,
+        name: this.formData.name,
+        age: this.formData.birthdate,
         location: this.location,
-        sex: this.sex,
-        weight: this.weight,
-        type: this.type,
-        groupID: this.group,
-        about: this.description,
+        sex: this.formData.sex,
+        weight: this.formData.weight,
+        type: this.formData.type,
+        groupID: this.formData.group,
+        about: this.formData.description,
         img: this.file
       }
       try {
         await this.$store.dispatch('addAnimal', formData)
-        this.$v.$reset()
+        this.formData = {
+          group: '',
+          type: '',
+          name: '',
+          file: '',
+          description: '',
+          birthdate: '',
+          weight: '',
+          sex: false,
+          country: '',
+          city: ''
+        }
+        this.$v.formData.$reset()
       } catch (error) {}
     }
   }

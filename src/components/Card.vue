@@ -1,7 +1,7 @@
 <template>
-  <div class="card" v-on:click="detailAnimal(index)">
+  <div class="card">
     <div class="card__head">
-      <div class="card__head-img" v-if="animal.img">
+      <div class="card__head-img" v-if="animal.img" v-on:click="detailAnimal(index)">
         <img :src="animal.img" alt="" />
       </div>
       <div class="card__head-btn" :class="{ 'card__head-btn_added' : isFavorite }" v-on:click="favorite(index)">
@@ -20,7 +20,7 @@
         </svg>
       </div>
     </div>
-    <div class="card__bottom">
+    <div class="card__bottom" v-on:click="detailAnimal(index)">
       <div
         class="card__bottom-sex"
         :class="{

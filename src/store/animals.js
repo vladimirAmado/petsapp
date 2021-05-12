@@ -41,12 +41,6 @@ export default {
     async removeFavorite ({ dispatch, commit }, { animalId, key }) {
       try {
         await firebase.database().ref(`animals/${animalId}/users/`).child(key).remove()
-          .then(function () {
-            console.log('Remove succeeded.')
-          })
-          .catch(function (error) {
-            console.log('Remove failed: ' + error.message)
-          })
         dispatch('fetchAnimals')
       } catch (e) {
         commit('setError', e)
@@ -55,7 +49,7 @@ export default {
     },
     async addAnimal ({ dispatch, commit }, { name, age, location, sex, weight, type, groupID, about, img }) {
       try {
-        await firebase.database().ref('animals/').push().set({
+        await firebase.database().ref('/animals').push().set({
           name: name,
           age: age,
           location: location,

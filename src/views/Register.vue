@@ -145,9 +145,8 @@
       <vs-button
         color="#ff5f54"
         v-if="step === 3"
-        type="button"
+        type="submit"
         class="btn btn_rounded"
-        v-on:click="onSubmit()"
       >
         Начать
       </vs-button>
